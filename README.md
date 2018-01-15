@@ -6,7 +6,22 @@
 
 Inspired by [`fast-json-stringify`](https://github.com/fastify/fast-json-stringify), this module allows you to compile a function that will stringify a JSON payload **2x-4x faster** than `JSON.stringify()` (up to 8.5x faster in one case). To get such high performance, you compile the function with a schema that describes the shape of the data that you want to stringify.
 
-The difference between `compile-json-stringify` and `fast-json-stringify` is that with `fast-json-stringify` you define the shape of the _output_ data, whereas with this module you define the shape of the _input_ data.
+> The difference between `compile-json-stringify` and `fast-json-stringify` is that with `fast-json-stringify` you define the shape of the _output_ data, whereas with this module you define the shape of the _input_ data.
+
+**Table of Contents**
+
++ [Installation](#installation)
++ [Example Use](#example-usage)
++ [API](#api)
+  + [schema](#schema)
+    + [`type`](#type)
+    + [`items`](#items)
+    + [`properties`](#properties)
+    + [`additionalProperties`](#additionalproperties)
++ [Differences from `JSON.stringify()`](#differences-from-jsonstringify)
+  + [When type coercion is off](#when-type-coercion-is-off-the-default)
+  + [When type coercion is on](#when-type-coercion-is-on)
++ [Benchmark](#benchmark)
 
 
 ## Installation
@@ -50,7 +65,7 @@ compileJsonStringify(schema);
 
 The root schema may contain the following options in addition to the options defined in the [`schema`](#schema) section:
 
-+ `coerceTypes` - Off by default. Set this to `true` to turn on [`type coercion mode`](#type-coercion-mode).
++ `coerceTypes` - Off by default. Set this to `true` to turn on [`type coercion mode`](#when-type-coercion-is-on).
 + `debug` - Set this to `true` to print out the full compiled code when a function is compiled.
 
 ### `schema`
@@ -194,7 +209,7 @@ stringify({
 
 #### `additionalProperties`
 
-A booelean to indicate that an `object` type has more properties than just the ones defined in `properties`.
+A boolean to indicate that an `object` type has more properties than just the ones defined in `properties`.
 Defaults to `false`.
 
 **Note:** Setting `additionalProperties` to `true` will cause the object to always be stringified with `JSON.stringify()`.
@@ -208,11 +223,11 @@ The compiled function will act very similar to `JSON.stringify()`. In this mode,
 
 However, there are still 2 main differences from `JSON.stringify()`:
 
-##### 1) Object Properties and Tuple Arrays
+#### 1) Object Properties and Tuple Arrays
 
 Objects with [missing properties](#missing-properties) and array [tuples](#tuple-format) will not have extra properties or items stringified.
 
-##### 2) Object Pitfalls
+#### 2) Object Pitfalls
 
 It is possible to accidentally stringify data in the wrong way if you define a schema with only an `object` type and the compiled function gets passed an array or date object. If this happens, the array or date will be stringified in the format defined by the object schema (because arrays and dates are both objects).
 
@@ -248,7 +263,7 @@ Make sure to always define all possible types for both safety and the best perfo
 
 > **Note:** This option was originally implemented in an attempt to improve performance by avoiding extra type-checking and function calls, but the synthetic benchmark shows that this makes almost no difference to performance.
 
-The compiled function will coerce the received data into the defined type or it will throw an error if it cannot coerce the data (e.g. if `null` or `undefined` is passed to an `object` type).
+The compiled function will coerce the received data into the defined type or it will throw an error if it cannot coerce the data (e.g. if `null` or `undefined` is stringified as an `object` type).
 
 If multiple types are specified, the stringifier will attempt to match the data to one of the defined types (such as `1` to `number` or `true` to `boolean`). If no matching type is defined, the data will be coerced to the defined type that is the **lowest** on this list:
 
