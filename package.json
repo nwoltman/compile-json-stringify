@@ -1,0 +1,42 @@
+{
+  "name": "compile-json-stringify",
+  "version": "0.1.0",
+  "description": "Compile a JSON.stringify() function with type hints for maximum performance",
+  "main": "compile-json-stringify.js",
+  "files": [
+    "compile-json-stringify.js"
+  ],
+  "engines": {
+    "node": ">=6"
+  },
+  "license": "MIT",
+  "author": "Nathan Woltman <nwoltman@outlook.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nwoltman/compile-json-stringify.git"
+  },
+  "homepage": "https://github.com/nwoltman/compile-json-stringify#readme",
+  "bugs": {
+    "url": "https://github.com/nwoltman/compile-json-stringify/issues"
+  },
+  "keywords": [
+    "compile",
+    "json",
+    "stringify",
+    "fast"
+  ],
+  "devDependencies": {
+    "coveralls": "^3.0.0",
+    "eslint": "^4.15.0",
+    "mocha": "^4.1.0",
+    "nyc": "^11.4.1",
+    "should": "^13.2.1",
+    "sinon": "^4.1.5"
+  },
+  "scripts": {
+    "lint": "eslint *.js test/*.js",
+    "test-only": "nyc --reporter=html --reporter=text-summary mocha",
+    "test": "npm run lint && npm run test-only",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+  }
+}

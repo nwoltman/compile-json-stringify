@@ -8,8 +8,15 @@ yarn-error.log*
 # Coverage directory used by tools like istanbul
 coverage
 
+# nyc test coverage
+.nyc_output
+
 # Dependency directory
 node_modules/
+
+# Lock files
+package-lock.json
+yarn.lock
 
 # Sublime Text
 *.sublime-*
