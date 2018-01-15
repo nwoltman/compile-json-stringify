@@ -21,7 +21,7 @@ Inspired by [`fast-json-stringify`](https://github.com/fastify/fast-json-stringi
 + [Differences from `JSON.stringify()`](#differences-from-jsonstringify)
   + [When type coercion is off](#when-type-coercion-is-off-the-default)
   + [When type coercion is on](#when-type-coercion-is-on)
-+ [Benchmark](#benchmark)
++ [Benchmark Results](#benchmark-results)
 
 
 ## Installation
