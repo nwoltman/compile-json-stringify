@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/nwoltman/compile-json-stringify.svg?branch=master)](https://travis-ci.org/nwoltman/compile-json-stringify)
 [![Coverage Status](https://coveralls.io/repos/nwoltman/compile-json-stringify/badge.svg?branch=master)](https://coveralls.io/r/nwoltman/compile-json-stringify?branch=master)
 
-Inspired by [`fast-json-stringify`](https://github.com/fastify/fast-json-stringify), this module allows you to compile a function that will stringify a JSON payload **2x-4x faster** than `JSON.stringify()` (up to 8.5x faster in one case). To get such high performance, you compile the function with a schema that describes the shape of the data that you want to stringify.
+Inspired by [`fast-json-stringify`](https://github.com/fastify/fast-json-stringify), this module allows you to compile a function that will stringify a JSON payload **2x-5x faster** than `JSON.stringify()` (up to 8.5x faster in one case). To get such high performance, you compile the function with a schema that describes the shape of the data that you want to stringify.
 
 > The difference between `compile-json-stringify` and `fast-json-stringify` is that with `fast-json-stringify` you define the shape of the _output_ data, whereas with this module you define the shape of the _input_ data.
 
@@ -315,18 +315,19 @@ stringify({name: 'table', length: 32}); // -> '{"name":"table","length":32}'
 // Matched 'object'
 ```
 
+
 ## Benchmark Results
 
 Run on Node 9.4.0
 
 ```
-1) object - JSON.stringify x 1,966,447 ops/sec ±0.58% (89 runs sampled)
-1) object - compile-json-stringify x 7,555,458 ops/sec ±0.43% (91 runs sampled)
-1) object - compile-json-stringify coerceTypes x 7,690,803 ops/sec ±0.60% (94 runs sampled)
+1) object - JSON.stringify x 1,951,961 ops/sec ±0.63% (93 runs sampled)
+1) object - compile-json-stringify x 7,918,447 ops/sec ±0.53% (97 runs sampled)
+1) object - compile-json-stringify coerceTypes x 8,283,659 ops/sec ±0.51% (94 runs sampled)
 
-2) array of objects - JSON.stringify x 32,720 ops/sec ±0.41% (95 runs sampled)
-2) array of objects - compile-json-stringify x 88,136 ops/sec ±0.79% (96 runs sampled)
-2) array of objects - compile-json-stringify coerceTypes x 90,879 ops/sec ±0.56% (97 runs sampled)
+2) array of objects - JSON.stringify x 32,524 ops/sec ±0.76% (96 runs sampled)
+2) array of objects - compile-json-stringify x 95,166 ops/sec ±0.61% (95 runs sampled)
+2) array of objects - compile-json-stringify coerceTypes x 95,651 ops/sec ±1.88% (89 runs sampled)
 
 3) array of numbers - JSON.stringify x 2,458,982 ops/sec ±0.52% (96 runs sampled)
 3) array of numbers - compile-json-stringify x 5,539,276 ops/sec ±0.42% (96 runs sampled)
@@ -348,7 +349,7 @@ Run on Node 9.4.0
 7) multiple types - compile-json-stringify x 26,271,332 ops/sec ±0.48% (94 runs sampled)
 7) multiple types - compile-json-stringify coerceTypes x 26,056,262 ops/sec ±0.58% (94 runs sampled)
 
-8) multiple types in an object - JSON.stringify x 1,031,019 ops/sec ±0.59% (92 runs sampled)
-8) multiple types in an object - compile-json-stringify x 3,850,184 ops/sec ±0.44% (91 runs sampled)
-8) multiple types in an object - compile-json-stringify coerceTypes x 4,060,270 ops/sec ±0.59% (93 runs sampled)
+8) multiple types in an object - JSON.stringify x 992,784 ops/sec ±0.55% (98 runs sampled)
+8) multiple types in an object - compile-json-stringify x 4,765,136 ops/sec ±0.48% (96 runs sampled)
+8) multiple types in an object - compile-json-stringify coerceTypes x 4,834,149 ops/sec ±0.48% (96 runs sampled)
 ```

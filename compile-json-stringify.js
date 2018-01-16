@@ -353,6 +353,7 @@ class CodeBuilder {
 
     for (const key in properties) {
       const accessor = buildAccessor(key);
+      const stringifiedKey = stringifyPropertyKey(key);
       const schemaFn = this.buildSchemaFn(properties[key]);
 
       code = schemaFn.code + code;
@@ -360,18 +361,24 @@ class CodeBuilder {
       if (coerceTypes) {
         code += `
           if (obj${accessor} !== undefined) {
-            if (addComma) str += ','
-            else addComma = true
-            str += '${stringifyPropertyKey(key)}:' + ${schemaFn.name}(obj${accessor})
+            if (addComma) {
+              str += ',${stringifiedKey}:' + ${schemaFn.name}(obj${accessor})
+            } else {
+              addComma = true
+              str += '${stringifiedKey}:' + ${schemaFn.name}(obj${accessor})
+            }
           }`;
       } else {
         code += `
           if (obj${accessor} !== undefined) {
             val = ${schemaFn.name}(obj${accessor})
             if (val !== undefined) {
-              if (addComma) str += ','
-              else addComma = true
-              str += '${stringifyPropertyKey(key)}:' + val
+              if (addComma) {
+                str += ',${stringifiedKey}:' + val
+              } else {
+                addComma = true
+                str += '${stringifiedKey}:' + val
+              }
             }
           }`;
       }
