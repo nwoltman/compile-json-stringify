@@ -17,6 +17,7 @@ Inspired by [`fast-json-stringify`](https://github.com/fastify/fast-json-stringi
     + [`type`](#type)
     + [`items`](#items)
     + [`properties`](#properties)
+      + [Missing properties](#missing-properties)
     + [`additionalProperties`](#additionalproperties)
 + [Differences from `JSON.stringify()`](#differences-from-jsonstringify)
   + [When type coercion is off](#when-type-coercion-is-off-the-default)
@@ -108,7 +109,7 @@ Example:
 
 Defines the type(s) of data in an `array` type. It has 2 formats:
 
-##### all-items format
+##### all items format
 
 ```js
 {
@@ -262,6 +263,8 @@ Make sure to always define all possible types for both safety and the best perfo
 ### When type coercion is ON
 
 > **Note:** This option was originally implemented in an attempt to improve performance by avoiding extra type-checking and function calls, but the synthetic benchmark shows that this makes almost no difference to performance.
+
+The same differences as when [type coercion is off](#when-type-coercion-is-off-the-default) plus the following:
 
 The compiled function will coerce the received data into the defined type or it will throw an error if it cannot coerce the data (e.g. if `null` or `undefined` is stringified as an `object` type).
 
