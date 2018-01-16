@@ -3,6 +3,6 @@
   "license": "MIT",
   "dependencies": {
     "benchmark": "^2.1.4",
-    "compile-json-stringify": "nwoltman/compile-json-stringify"
+    "compile-json-stringify": "github:nwoltman/compile-json-stringify"
   }
 }
