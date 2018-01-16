@@ -320,17 +320,17 @@ stringify({name: 'table', length: 32}); // -> '{"name":"table","length":32}'
 Run on Node 9.4.0
 
 ```
-1) object - JSON.stringify x 1,970,239 ops/sec ±0.46% (94 runs sampled)
-1) object - compile-json-stringify x 6,580,627 ops/sec ±0.48% (93 runs sampled)
-1) object - compile-json-stringify coerceTypes x 6,838,477 ops/sec ±0.63% (93 runs sampled)
+1) object - JSON.stringify x 1,966,447 ops/sec ±0.58% (89 runs sampled)
+1) object - compile-json-stringify x 7,555,458 ops/sec ±0.43% (91 runs sampled)
+1) object - compile-json-stringify coerceTypes x 7,690,803 ops/sec ±0.60% (94 runs sampled)
 
-2) array of objects - JSON.stringify x 32,461 ops/sec ±0.40% (96 runs sampled)
-2) array of objects - compile-json-stringify x 76,355 ops/sec ±0.58% (97 runs sampled)
-2) array of objects - compile-json-stringify coerceTypes x 79,007 ops/sec ±0.63% (93 runs sampled)
+2) array of objects - JSON.stringify x 32,720 ops/sec ±0.41% (95 runs sampled)
+2) array of objects - compile-json-stringify x 88,136 ops/sec ±0.79% (96 runs sampled)
+2) array of objects - compile-json-stringify coerceTypes x 90,879 ops/sec ±0.56% (97 runs sampled)
 
-3) array of numbers - JSON.stringify x 2,455,256 ops/sec ±0.50% (97 runs sampled)
-3) array of numbers - compile-json-stringify x 5,212,280 ops/sec ±0.50% (93 runs sampled)
-3) array of numbers - compile-json-stringify coerceTypes x 5,086,219 ops/sec ±0.45% (96 runs sampled)
+3) array of numbers - JSON.stringify x 2,458,982 ops/sec ±0.52% (96 runs sampled)
+3) array of numbers - compile-json-stringify x 5,539,276 ops/sec ±0.42% (96 runs sampled)
+3) array of numbers - compile-json-stringify coerceTypes x 5,521,954 ops/sec ±0.50% (94 runs sampled)
 
 4) tuple - JSON.stringify x 2,910,989 ops/sec ±0.43% (96 runs sampled)
 4) tuple - compile-json-stringify x 8,035,354 ops/sec ±0.52% (94 runs sampled)
@@ -348,7 +348,7 @@ Run on Node 9.4.0
 7) multiple types - compile-json-stringify x 26,271,332 ops/sec ±0.48% (94 runs sampled)
 7) multiple types - compile-json-stringify coerceTypes x 26,056,262 ops/sec ±0.58% (94 runs sampled)
 
-8) multiple types in an object - JSON.stringify x 1,043,558 ops/sec ±0.53% (95 runs sampled)
-8) multiple types in an object - compile-json-stringify x 3,906,998 ops/sec ±0.47% (96 runs sampled)
-8) multiple types in an object - compile-json-stringify coerceTypes x 3,868,820 ops/sec ±0.64% (96 runs sampled)
+8) multiple types in an object - JSON.stringify x 1,031,019 ops/sec ±0.59% (92 runs sampled)
+8) multiple types in an object - compile-json-stringify x 3,850,184 ops/sec ±0.44% (91 runs sampled)
+8) multiple types in an object - compile-json-stringify coerceTypes x 4,060,270 ops/sec ±0.59% (93 runs sampled)
 ```

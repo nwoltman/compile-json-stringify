@@ -328,7 +328,8 @@ class CodeBuilder {
       function ${name}(arr) {
         var str = '['
         for (var i = 0; i < arr.length; i++) {
-          str += (i > 0 ? ',' : '') + ${schemaFn.name}(arr[i])
+          if (i > 0) str += ','
+          str += ${schemaFn.name}(arr[i])
         }
         return str + ']'
       }
@@ -359,16 +360,18 @@ class CodeBuilder {
       if (coerceTypes) {
         code += `
           if (obj${accessor} !== undefined) {
-            str += (addComma ? ',' : (addComma = true, '')) +
-              '${stringifyPropertyKey(key)}:' + ${schemaFn.name}(obj${accessor})
+            if (addComma) str += ','
+            else addComma = true
+            str += '${stringifyPropertyKey(key)}:' + ${schemaFn.name}(obj${accessor})
           }`;
       } else {
         code += `
           if (obj${accessor} !== undefined) {
             val = ${schemaFn.name}(obj${accessor})
             if (val !== undefined) {
-              str += (addComma ? ',' : (addComma = true, '')) +
-                '${stringifyPropertyKey(key)}:' + val
+              if (addComma) str += ','
+              else addComma = true
+              str += '${stringifyPropertyKey(key)}:' + val
             }
           }`;
       }
