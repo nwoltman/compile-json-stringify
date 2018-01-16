@@ -16,11 +16,11 @@ function compileJSONStringify(schema) {
 class CodeBuilder {
   constructor(schema) {
     this.schema = schema;
-    this.coerceTypes = schema.coerceTypes;
+    this.coerceTypes = schema.coerceTypes || false;
 
-    this.schemaID = 0;
-    this.arrayID = 0;
-    this.objectID = 0;
+    this.schemaFnID = 0;
+    this.arrayFnID = 0;
+    this.objectFnID = 0;
 
     this.reusableSchemaFnNames = new Set();
     this.reusableArrayFnNames = new Set();
@@ -56,7 +56,7 @@ class CodeBuilder {
       // Continue building the function
     }
 
-    const name = reusableFnName || `$schema${this.schemaID++}`;
+    const name = reusableFnName || `$schema${this.schemaFnID++}`;
     var code = `\nfunction ${name}(value) {\n`;
 
     const {coerceTypes} = this;
@@ -295,7 +295,7 @@ class CodeBuilder {
       this.reusableArrayFnNames.add(reusableFnName);
     }
 
-    const name = reusableFnName || `$array${this.arrayID++}`;
+    const name = reusableFnName || `$array${this.arrayFnID++}`;
 
     return items instanceof Array
       ? this.buildTupleArrayFn(items, name)
@@ -339,7 +339,7 @@ class CodeBuilder {
 
   buildObjectFn(properties) {
     const {coerceTypes} = this;
-    const name = `$object${this.objectID++}`;
+    const name = `$object${this.objectFnID++}`;
     var code = `
       function ${name}(obj) {
         var str = '{'
