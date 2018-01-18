@@ -45,9 +45,9 @@ const object = {
 if (config.has('1')) {
   const stringifyMaster = compileJSONStringifyMaster(objectSchema);
   const stringifyLocal = compileJSONStringifyLocal(objectSchema);
-  const objectSchemaCoercion = Object.assign({coerceTypes: true}, objectSchema);
-  const stringifyMasterCoerce = compileJSONStringifyMaster(objectSchemaCoercion);
-  const stringifyLocalCoerce = compileJSONStringifyLocal(objectSchemaCoercion);
+  const objectSchemaStrict = Object.assign({strict: true}, objectSchema);
+  const stringifyMasterStrict = compileJSONStringifyMaster(objectSchemaStrict);
+  const stringifyLocalStrict = compileJSONStringifyLocal(objectSchemaStrict);
 
   suite
     .add('1) object - JSON.stringify', () => {
@@ -59,11 +59,11 @@ if (config.has('1')) {
     .add('1) object - compile-json-stringify local', () => {
       stringifyLocal(object);
     })
-    .add('1) object - compile-json-stringify coerceTypes master', () => {
-      stringifyMasterCoerce(object);
+    .add('1) object - compile-json-stringify strict master', () => {
+      stringifyMasterStrict(object);
     })
-    .add('1) object - compile-json-stringify coerceTypes local', () => {
-      stringifyLocalCoerce(object);
+    .add('1) object - compile-json-stringify strict local', () => {
+      stringifyLocalStrict(object);
     });
 }
 
@@ -74,9 +74,9 @@ if (config.has('2')) {
   };
   const stringifyMaster = compileJSONStringifyMaster(arraySchema);
   const stringifyLocal = compileJSONStringifyLocal(arraySchema);
-  arraySchema.coerceTypes = true;
-  const stringifyMasterCoerce = compileJSONStringifyMaster(arraySchema);
-  const stringifyLocalCoerce = compileJSONStringifyLocal(arraySchema);
+  arraySchema.strict = true;
+  const stringifyMasterStrict = compileJSONStringifyMaster(arraySchema);
+  const stringifyLocalStrict = compileJSONStringifyLocal(arraySchema);
 
   const array = new Array(100).fill(object);
 
@@ -90,11 +90,11 @@ if (config.has('2')) {
     .add('2) array of objects - compile-json-stringify local', () => {
       stringifyLocal(array);
     })
-    .add('2) array of objects - compile-json-stringify coerceTypes master', () => {
-      stringifyMasterCoerce(array);
+    .add('2) array of objects - compile-json-stringify strict master', () => {
+      stringifyMasterStrict(array);
     })
-    .add('2) array of objects - compile-json-stringify coerceTypes local', () => {
-      stringifyLocalCoerce(array);
+    .add('2) array of objects - compile-json-stringify strict local', () => {
+      stringifyLocalStrict(array);
     });
 }
 
@@ -105,9 +105,9 @@ if (config.has('3')) {
   };
   const stringifyMaster = compileJSONStringifyMaster(arraySchema);
   const stringifyLocal = compileJSONStringifyLocal(arraySchema);
-  arraySchema.coerceTypes = true;
-  const stringifyMasterCoerce = compileJSONStringifyMaster(arraySchema);
-  const stringifyLocalCoerce = compileJSONStringifyLocal(arraySchema);
+  arraySchema.strict = true;
+  const stringifyMasterStrict = compileJSONStringifyMaster(arraySchema);
+  const stringifyLocalStrict = compileJSONStringifyLocal(arraySchema);
 
   const array = [1, 255, 3, 4, 5608, 6, 7, 895166, 9];
 
@@ -121,11 +121,11 @@ if (config.has('3')) {
     .add('3) array of numbers - compile-json-stringify local', () => {
       stringifyLocal(array);
     })
-    .add('3) array of numbers - compile-json-stringify coerceTypes master', () => {
-      stringifyMasterCoerce(array);
+    .add('3) array of numbers - compile-json-stringify strict master', () => {
+      stringifyMasterStrict(array);
     })
-    .add('3) array of numbers - compile-json-stringify coerceTypes local', () => {
-      stringifyLocalCoerce(array);
+    .add('3) array of numbers - compile-json-stringify strict local', () => {
+      stringifyLocalStrict(array);
     });
 }
 
@@ -140,9 +140,9 @@ if (config.has('4')) {
   };
   const stringifyMaster = compileJSONStringifyMaster(tupleSchema);
   const stringifyLocal = compileJSONStringifyLocal(tupleSchema);
-  tupleSchema.coerceTypes = true;
-  const stringifyMasterCoerce = compileJSONStringifyMaster(tupleSchema);
-  const stringifyLocalCoerce = compileJSONStringifyLocal(tupleSchema);
+  tupleSchema.strict = true;
+  const stringifyMasterStrict = compileJSONStringifyMaster(tupleSchema);
+  const stringifyLocalStrict = compileJSONStringifyLocal(tupleSchema);
 
   const tuple = [20000, 'leagues', true];
 
@@ -156,18 +156,18 @@ if (config.has('4')) {
     .add('4) tuple - compile-json-stringify local', () => {
       stringifyLocal(tuple);
     })
-    .add('4) tuple - compile-json-stringify coerceTypes master', () => {
-      stringifyMasterCoerce(tuple);
+    .add('4) tuple - compile-json-stringify strict master', () => {
+      stringifyMasterStrict(tuple);
     })
-    .add('4) tuple - compile-json-stringify coerceTypes local', () => {
-      stringifyLocalCoerce(tuple);
+    .add('4) tuple - compile-json-stringify strict local', () => {
+      stringifyLocalStrict(tuple);
     });
 }
 
 const stringifyStringMaster = compileJSONStringifyMaster({type: 'string'});
 const stringifyStringLocal = compileJSONStringifyLocal({type: 'string'});
-const stringifyStringMasterSafe = compileJSONStringifyMaster({type: 'string', coerceTypes: true});
-const stringifyStringLocalSafe = compileJSONStringifyLocal({type: 'string', coerceTypes: true});
+const stringifyStringMasterSafe = compileJSONStringifyMaster({type: 'string', strict: true});
+const stringifyStringLocalSafe = compileJSONStringifyLocal({type: 'string', strict: true});
 
 if (config.has('5')) {
   const shortString = 'A short string';
@@ -182,10 +182,10 @@ if (config.has('5')) {
     .add('5) short string - compile-json-stringify local', () => {
       stringifyStringLocal(shortString);
     })
-    .add('5) short string - compile-json-stringify coerceTypes master', () => {
+    .add('5) short string - compile-json-stringify strict master', () => {
       stringifyStringMasterSafe(shortString);
     })
-    .add('5) short string - compile-json-stringify coerceTypes local', () => {
+    .add('5) short string - compile-json-stringify strict local', () => {
       stringifyStringLocalSafe(shortString);
     });
 }
@@ -203,10 +203,10 @@ if (config.has('6')) {
     .add('6) long string - compile-json-stringify local', () => {
       stringifyStringLocal(longString);
     })
-    .add('6) long string - compile-json-stringify coerceTypes master', () => {
+    .add('6) long string - compile-json-stringify strict master', () => {
       stringifyStringMasterSafe(longString);
     })
-    .add('6) long string - compile-json-stringify coerceTypes local', () => {
+    .add('6) long string - compile-json-stringify strict local', () => {
       stringifyStringLocalSafe(longString);
     });
 }
@@ -217,9 +217,9 @@ if (config.has('7')) {
   };
   const stringifyMaster = compileJSONStringifyMaster(schema);
   const stringifyLocal = compileJSONStringifyLocal(schema);
-  schema.coerceTypes = true;
-  const stringifyMasterCoerce = compileJSONStringifyMaster(schema);
-  const stringifyLocalCoerce = compileJSONStringifyLocal(schema);
+  schema.strict = true;
+  const stringifyMasterStrict = compileJSONStringifyMaster(schema);
+  const stringifyLocalStrict = compileJSONStringifyLocal(schema);
 
   const typeA = null;
   const typeB = 'firstName';
@@ -237,13 +237,13 @@ if (config.has('7')) {
       stringifyLocal(typeA);
       stringifyLocal(typeB);
     })
-    .add('7) multiple types - compile-json-stringify coerceTypes master', () => {
-      stringifyMasterCoerce(typeA);
-      stringifyMasterCoerce(typeB);
+    .add('7) multiple types - compile-json-stringify strict master', () => {
+      stringifyMasterStrict(typeA);
+      stringifyMasterStrict(typeB);
     })
-    .add('7) multiple types - compile-json-stringify coerceTypes local', () => {
-      stringifyLocalCoerce(typeA);
-      stringifyLocalCoerce(typeB);
+    .add('7) multiple types - compile-json-stringify strict local', () => {
+      stringifyLocalStrict(typeA);
+      stringifyLocalStrict(typeB);
     });
 }
 
@@ -258,9 +258,9 @@ if (config.has('8')) {
   };
   const stringifyMaster = compileJSONStringifyMaster(schema);
   const stringifyLocal = compileJSONStringifyLocal(schema);
-  schema.coerceTypes = true;
-  const stringifyMasterCoerce = compileJSONStringifyMaster(schema);
-  const stringifyLocalCoerce = compileJSONStringifyLocal(schema);
+  schema.strict = true;
+  const stringifyMasterStrict = compileJSONStringifyMaster(schema);
+  const stringifyLocalStrict = compileJSONStringifyLocal(schema);
 
   const objectA = {
     id: 11,
@@ -286,13 +286,13 @@ if (config.has('8')) {
       stringifyLocal(objectA);
       stringifyLocal(objectB);
     })
-    .add('8) multiple types in an object - compile-json-stringify coerceTypes master', () => {
-      stringifyMasterCoerce(objectA);
-      stringifyMasterCoerce(objectB);
+    .add('8) multiple types in an object - compile-json-stringify strict master', () => {
+      stringifyMasterStrict(objectA);
+      stringifyMasterStrict(objectB);
     })
-    .add('8) multiple types in an object - compile-json-stringify coerceTypes local', () => {
-      stringifyLocalCoerce(objectA);
-      stringifyLocalCoerce(objectB);
+    .add('8) multiple types in an object - compile-json-stringify strict local', () => {
+      stringifyLocalStrict(objectA);
+      stringifyLocalStrict(objectB);
     });
 }
 

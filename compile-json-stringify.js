@@ -16,7 +16,7 @@ function compileJSONStringify(schema) {
 class CodeBuilder {
   constructor(schema) {
     this.schema = schema;
-    this.coerceTypes = schema.coerceTypes || false;
+    this.strict = schema.strict || false;
 
     this.schemaFnID = 0;
     this.arrayFnID = 0;
@@ -59,14 +59,14 @@ class CodeBuilder {
     const name = reusableFnName || `$schema${this.schemaFnID++}`;
     var code = `\nfunction ${name}(value) {\n`;
 
-    const {coerceTypes} = this;
+    const {strict} = this;
     const numTypes = typeof schema.type === 'string' ? 1 : schema.type.length;
     var numTypesHandled = 0;
     var isLastType = false;
 
     function shouldCheckType() {
       isLastType = ++numTypesHandled === numTypes;
-      return !coerceTypes || !isLastType;
+      return !strict || !isLastType;
     }
 
     if (types.handleNull) {
@@ -107,7 +107,7 @@ class CodeBuilder {
     if (types.arrayItems !== null) {
       const arrayFn = this.buildArrayFn(types.arrayItems);
 
-      if (coerceTypes && numTypes === 1) {
+      if (strict && numTypes === 1) {
         // Shortcut to avoid: function $schema0(value) { return $array0(value); }
         return arrayFn;
       }
@@ -120,25 +120,25 @@ class CodeBuilder {
     }
 
     if (types.objectProperties !== null) {
-      if (coerceTypes && schema.additionalProperties) {
+      if (strict && schema.additionalProperties) {
         code += 'return JSON.stringify(value)\n';
       } else if (!schema.additionalProperties) {
         const objectFn = this.buildObjectFn(types.objectProperties);
 
-        if (coerceTypes && numTypes === 1) {
+        if (strict && numTypes === 1) {
           // Shortcut to avoid: function $schema0(value) { return $object0(value); }
           return objectFn;
         }
 
         code = objectFn.code + code;
-        if (!coerceTypes) {
+        if (!strict) {
           code += 'if (typeof value === "object") ';
         }
         code += `return ${objectFn.name}(value)\n`;
       }
     }
 
-    if (!coerceTypes) {
+    if (!strict) {
       code += 'return JSON.stringify(value)\n';
     }
 
@@ -194,7 +194,7 @@ class CodeBuilder {
           }
           break;
         case 'object':
-          if (!this.coerceTypes) {
+          if (!this.strict) {
             handleNull = true; // Since: typeof null === 'object'
           }
           objectProperties = schema.properties;
@@ -339,14 +339,14 @@ class CodeBuilder {
   }
 
   buildObjectFn(properties) {
-    const {coerceTypes} = this;
+    const {strict} = this;
     const name = `$object${this.objectFnID++}`;
     var code = `
       function ${name}(obj) {
         var str = '{'
         var addComma = false`;
 
-    if (!coerceTypes) {
+    if (!strict) {
       code += `
         var val`;
     }
@@ -358,7 +358,7 @@ class CodeBuilder {
 
       code = schemaFn.code + code;
 
-      if (coerceTypes) {
+      if (strict) {
         code += `
           if (obj${accessor} !== undefined) {
             if (addComma) {

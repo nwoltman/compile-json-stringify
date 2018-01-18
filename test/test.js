@@ -108,13 +108,13 @@ describe('compile-json-stringify', () => {
   });
 
 
-  [false, true].forEach((coerceTypes) => {
+  [false, true].forEach((strict) => {
 
-    describe(`when 'coerceTypes' is ${coerceTypes}`, () => {
+    describe(`when 'strict' is ${strict}`, () => {
 
       it('should stringify null', () => {
         const stringify = compileJSONStringify({
-          coerceTypes,
+          strict,
           type: 'null',
         });
 
@@ -123,7 +123,7 @@ describe('compile-json-stringify', () => {
 
       it('should stringify strings', () => {
         const stringify = compileJSONStringify({
-          coerceTypes,
+          strict,
           type: 'string',
         });
 
@@ -139,7 +139,7 @@ describe('compile-json-stringify', () => {
 
       it('should stringify numbers', () => {
         const stringify = compileJSONStringify({
-          coerceTypes,
+          strict,
           type: 'number',
         });
 
@@ -153,7 +153,7 @@ describe('compile-json-stringify', () => {
 
       it('should stringify booleans', () => {
         const stringify = compileJSONStringify({
-          coerceTypes,
+          strict,
           type: 'boolean',
         });
 
@@ -163,7 +163,7 @@ describe('compile-json-stringify', () => {
 
       it('should stringify dates', () => {
         const stringify = compileJSONStringify({
-          coerceTypes,
+          strict,
           type: 'date',
         });
 
@@ -173,7 +173,7 @@ describe('compile-json-stringify', () => {
 
       it('should stringify unbounded arrays', () => {
         const stringify = compileJSONStringify({
-          coerceTypes,
+          strict,
           type: 'array',
           items: {type: 'number'},
         });
@@ -183,7 +183,7 @@ describe('compile-json-stringify', () => {
 
       it('should stringify tuple arrays', () => {
         const stringify = compileJSONStringify({
-          coerceTypes,
+          strict,
           type: 'array',
           items: [
             {type: 'null'},
@@ -208,7 +208,7 @@ describe('compile-json-stringify', () => {
 
       it('should stringify objects', () => {
         const stringify = compileJSONStringify({
-          coerceTypes,
+          strict,
           type: 'object',
           properties: {
             id: {type: 'number'},
@@ -224,7 +224,7 @@ describe('compile-json-stringify', () => {
 
       it('should stringify the `any` type', () => {
         const stringify = compileJSONStringify({
-          coerceTypes,
+          strict,
           type: 'any',
         });
 
@@ -233,7 +233,7 @@ describe('compile-json-stringify', () => {
 
       it('should stringify multiple types', () => {
         const stringify = compileJSONStringify({
-          coerceTypes,
+          strict,
           type: [
             'null',
             'string',
@@ -261,7 +261,7 @@ describe('compile-json-stringify', () => {
 
       it('should stringify multiple types / 2', () => {
         const stringify = compileJSONStringify({
-          coerceTypes,
+          strict,
           type: ['null', 'array'],
           items: {type: 'string'},
         });
@@ -272,7 +272,7 @@ describe('compile-json-stringify', () => {
 
       it('should stringify nested objects', () => {
         const stringify = compileJSONStringify({
-          coerceTypes,
+          strict,
           type: 'object',
           properties: {
             id: {type: 'number'},
@@ -308,7 +308,7 @@ describe('compile-json-stringify', () => {
 
       it('should stringify nested arrays', () => {
         const stringify = compileJSONStringify({
-          coerceTypes,
+          strict,
           type: 'array',
           items: [
             {
@@ -351,7 +351,7 @@ describe('compile-json-stringify', () => {
 
       it('should work with separate arrays with the same shape', () => {
         const stringify = compileJSONStringify({
-          coerceTypes,
+          strict,
           type: 'array',
           items: [
             {
@@ -377,7 +377,7 @@ describe('compile-json-stringify', () => {
 
         it('should escape keys with special characters', () => {
           const stringify = compileJSONStringify({
-            coerceTypes,
+            strict,
             type: 'object',
             properties: {
               '\0 \u0001\n " \\': {type: 'number'},
@@ -392,7 +392,7 @@ describe('compile-json-stringify', () => {
 
         it('should output properties in the order that they are defined in the schema', () => {
           const stringify = compileJSONStringify({
-            coerceTypes,
+            strict,
             type: 'object',
             properties: {
               id: {type: 'number'},
@@ -408,7 +408,7 @@ describe('compile-json-stringify', () => {
 
         it('should exlude properties that are not in the schema', () => {
           const stringify = compileJSONStringify({
-            coerceTypes,
+            strict,
             type: 'object',
             properties: {
               id: {type: 'number'},
@@ -423,7 +423,7 @@ describe('compile-json-stringify', () => {
 
         it('should not include properties that are in the schema but not in the provided data', () => {
           const stringify = compileJSONStringify({
-            coerceTypes,
+            strict,
             type: 'object',
             properties: {
               id: {type: 'number'},
@@ -435,7 +435,7 @@ describe('compile-json-stringify', () => {
 
         it('should use JSON.stringify() if `additionalProperties` is truthy', () => {
           const stringify = compileJSONStringify({
-            coerceTypes,
+            strict,
             type: 'object',
             properties: {
               id: {type: 'number'},
@@ -449,7 +449,7 @@ describe('compile-json-stringify', () => {
           stringify(obj).should.equal(JSON.stringify(obj));
 
           const stringify2 = compileJSONStringify({
-            coerceTypes,
+            strict,
             type: 'object',
             properties: {
               obj: {
@@ -476,7 +476,7 @@ describe('compile-json-stringify', () => {
   });
 
 
-  describe('additionally, when type coercion mode is OFF', () => {
+  describe('additionally, when strict mode is OFF', () => {
 
     it('should not mistake `null` for an object', () => {
       const stringify = compileJSONStringify({
@@ -527,11 +527,11 @@ describe('compile-json-stringify', () => {
   });
 
 
-  describe('additionally, when type coercion mode is ON', () => {
+  describe('additionally, when strict mode is ON', () => {
 
     it('should stringify data as if it were the defined type', () => {
       const stringifyNull = compileJSONStringify({
-        coerceTypes: true,
+        strict: true,
         type: 'null',
       });
       stringifyNull('string').should.equal('null');
@@ -545,7 +545,7 @@ describe('compile-json-stringify', () => {
       stringifyNull(Symbol()).should.equal('null');
 
       const stringifyString = compileJSONStringify({
-        coerceTypes: true,
+        strict: true,
         type: 'string',
       });
       const date = new Date();
@@ -561,7 +561,7 @@ describe('compile-json-stringify', () => {
       stringifyString(() => {}).should.equal('"() => {}"');
 
       const stringifyNumber = compileJSONStringify({
-        coerceTypes: true,
+        strict: true,
         type: 'number',
       });
       stringifyNumber(null).should.equal('null');
@@ -575,7 +575,7 @@ describe('compile-json-stringify', () => {
       stringifyNumber(Symbol()).should.equal('null');
 
       const stringifyBoolean = compileJSONStringify({
-        coerceTypes: true,
+        strict: true,
         type: 'boolean',
       });
       stringifyBoolean(null).should.equal('false');
@@ -591,7 +591,7 @@ describe('compile-json-stringify', () => {
       stringifyBoolean(Symbol()).should.equal('true');
 
       const stringifyTuple = compileJSONStringify({
-        coerceTypes: true,
+        strict: true,
         type: 'array',
         items: [
           {type: 'string'},
@@ -610,7 +610,7 @@ describe('compile-json-stringify', () => {
       stringifyTuple(Symbol()).should.equal('["undefined",false]');
 
       const stringifyArray = compileJSONStringify({
-        coerceTypes: true,
+        strict: true,
         type: 'array',
         items: {type: 'string'},
       });
@@ -628,7 +628,7 @@ describe('compile-json-stringify', () => {
       stringifyArray(Symbol()).should.equal('[]');
 
       const stringifyObject = compileJSONStringify({
-        coerceTypes: true,
+        strict: true,
         type: 'object',
         properties: {
           length: {type: 'number'},

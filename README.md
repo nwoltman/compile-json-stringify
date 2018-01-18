@@ -20,8 +20,8 @@ Inspired by [`fast-json-stringify`](https://github.com/fastify/fast-json-stringi
       + [Missing properties](#missing-properties)
     + [`additionalProperties`](#additionalproperties)
 + [Differences from `JSON.stringify()`](#differences-from-jsonstringify)
-  + [When type coercion is off](#when-type-coercion-is-off-the-default)
-  + [When type coercion is on](#when-type-coercion-is-on)
+  + [When strict mode is off](#when-strict-mode-is-off-the-default)
+  + [When strict mode is on](#when-strict-mode-is-on)
 + [Benchmark Results](#benchmark-results)
 
 
@@ -66,7 +66,7 @@ compileJsonStringify(schema);
 
 The root schema may contain the following options in addition to the options defined in the [`schema`](#schema) section:
 
-+ `coerceTypes` - Off by default. Set this to `true` to turn on [`type coercion mode`](#when-type-coercion-is-on).
++ `strict` - `false` by default. Set this to `true` to turn on [`strict mode`](#when-strict-mode-is-on).
 + `debug` - Set this to `true` to print out the full compiled code when a function is compiled.
 
 ### `schema`
@@ -218,7 +218,7 @@ Defaults to `false`.
 
 ## Differences from `JSON.stringify()`
 
-### When type coercion is OFF (the default)
+### When strict mode is OFF (the default)
 
 The compiled function will act very similar to `JSON.stringify()`. In this mode, the schema is really just a way to hint at the types of the input date. If a part of the received data does not match what was in the schema, `JSON.stringify()` will be used to stringify that part of the data.
 
@@ -260,15 +260,15 @@ Make sure to always define all possible types for both safety and the best perfo
 }
 ```
 
-### When type coercion is ON
+### When strict mode is ON
 
-> **Note:** This option was originally implemented in an attempt to improve performance by avoiding extra type-checking and function calls, but the synthetic benchmark shows that this makes almost no difference to performance.
+> **Note:** This option was originally implemented in an attempt to improve performance by avoiding extra type-checking and function calls, but [the benchmark](#benchmark-results) shows that this makes almost no difference to performance.
 
-The same differences as when [type coercion is off](#when-type-coercion-is-off-the-default) plus the following:
+The same differences as when [strict mode is off](#when-strict-mode-is-off-the-default) plus the following:
 
-The compiled function will coerce the received data into the defined type or it will throw an error if it cannot coerce the data (e.g. if `null` or `undefined` is stringified as an `object` type).
+The compiled function will run under the assumption that the data it receives is the right type. This means that if the data is the wrong type, it will be coerced to the expected type or an error will be thrown if the data cannot be stringified like the expected type (e.g. object properties can't be accessed on `null` or `undefined`).
 
-If multiple types are specified, the stringifier will attempt to match the data to one of the defined types (such as `1` to `number` or `true` to `boolean`). If no matching type is defined, the data will be coerced to the defined type that is the **lowest** on this list:
+If multiple types are specified, the stringifier will attempt to match the data to one of the defined types (such as `1` to `number` or `true` to `boolean`). If the data does not match any of the defined types, the stringifier will attempt to stringify the data as if it were the defined type that is the **lowest** on this list:
 
 + `null`
 + `string`
@@ -282,25 +282,17 @@ Example:
 
 ```js
 const stringify =  compileJsonStringify({
-  type: ['date', 'array', 'object'],
+  type: ['date', 'array'],
   items: {type: 'string'},
-  properties: {
-    name: {type: 'string'},
-    length: {type: 'number'},
-  },
 });
 
 stringify(null); // -> Error
-// Did not match 'date' or 'array' and could not be coerced to an 'object'
+// Did not match 'date' and could not be stringified like an 'array'
 
-stringify('string'); // -> '{"length":6}'
-// Did not match 'date' or 'array' and was coerced to an 'object'
-
-stringify(123); // -> '{}'
-// Did not match 'date' or 'array' and was coerced to an 'object'
-
-stringify(true); // -> '{}'
-// Did not match 'date' or 'array' and was coerced to an 'object'
+stringify('string'); // -> '["s","t","r","i","n","g"]'
+stringify(123); // -> '[]'
+stringify(true); // -> '[]'
+// Did not match 'date' so was stringified like an 'array'
 
 stringify(new Date()); // -> '2018-01-15T21:53:15.639Z"'
 // Matched 'date'
@@ -311,8 +303,8 @@ stringify(['a', 'b']); // -> '["a","b"]'
 stringify([1, 2]); // -> '["1","2"]'
 // Matched 'array' and items were coerced to strings
 
-stringify({name: 'table', length: 32}); // -> '{"name":"table","length":32}'
-// Matched 'object'
+stringify({length: 2, '1': null}); // -> '["null","undefined"]'
+// Did not match 'date' so was stringified like an 'array' of strings
 ```
 
 
@@ -323,33 +315,33 @@ Run on Node 9.4.0
 ```
 1) object - JSON.stringify x 1,951,961 ops/sec ±0.63% (93 runs sampled)
 1) object - compile-json-stringify x 7,918,447 ops/sec ±0.53% (97 runs sampled)
-1) object - compile-json-stringify coerceTypes x 8,283,659 ops/sec ±0.51% (94 runs sampled)
+1) object - compile-json-stringify strict x 8,283,659 ops/sec ±0.51% (94 runs sampled)
 
 2) array of objects - JSON.stringify x 32,524 ops/sec ±0.76% (96 runs sampled)
 2) array of objects - compile-json-stringify x 95,166 ops/sec ±0.61% (95 runs sampled)
-2) array of objects - compile-json-stringify coerceTypes x 95,651 ops/sec ±1.88% (89 runs sampled)
+2) array of objects - compile-json-stringify strict x 95,651 ops/sec ±1.88% (89 runs sampled)
 
 3) array of numbers - JSON.stringify x 2,458,982 ops/sec ±0.52% (96 runs sampled)
 3) array of numbers - compile-json-stringify x 5,539,276 ops/sec ±0.42% (96 runs sampled)
-3) array of numbers - compile-json-stringify coerceTypes x 5,521,954 ops/sec ±0.50% (94 runs sampled)
+3) array of numbers - compile-json-stringify strict x 5,521,954 ops/sec ±0.50% (94 runs sampled)
 
 4) tuple - JSON.stringify x 2,910,989 ops/sec ±0.43% (96 runs sampled)
 4) tuple - compile-json-stringify x 8,035,354 ops/sec ±0.52% (94 runs sampled)
-4) tuple - compile-json-stringify coerceTypes x 8,080,111 ops/sec ±0.39% (96 runs sampled)
+4) tuple - compile-json-stringify strict x 8,080,111 ops/sec ±0.39% (96 runs sampled)
 
 5) short string - JSON.stringify x 4,955,866 ops/sec ±0.75% (91 runs sampled)
 5) short string - compile-json-stringify x 21,795,013 ops/sec ±0.45% (91 runs sampled)
-5) short string - compile-json-stringify coerceTypes x 21,687,609 ops/sec ±0.45% (93 runs sampled)
+5) short string - compile-json-stringify strict x 21,687,609 ops/sec ±0.45% (93 runs sampled)
 
 6) long string - JSON.stringify x 29,296 ops/sec ±0.43% (95 runs sampled)
 6) long string - compile-json-stringify x 54,528 ops/sec ±0.36% (95 runs sampled)
-6) long string - compile-json-stringify coerceTypes x 54,662 ops/sec ±0.23% (98 runs sampled)
+6) long string - compile-json-stringify strict x 54,662 ops/sec ±0.23% (98 runs sampled)
 
 7) multiple types - JSON.stringify x 3,002,964 ops/sec ±0.40% (96 runs sampled)
 7) multiple types - compile-json-stringify x 26,271,332 ops/sec ±0.48% (94 runs sampled)
-7) multiple types - compile-json-stringify coerceTypes x 26,056,262 ops/sec ±0.58% (94 runs sampled)
+7) multiple types - compile-json-stringify strict x 26,056,262 ops/sec ±0.58% (94 runs sampled)
 
 8) multiple types in an object - JSON.stringify x 992,784 ops/sec ±0.55% (98 runs sampled)
 8) multiple types in an object - compile-json-stringify x 4,765,136 ops/sec ±0.48% (96 runs sampled)
-8) multiple types in an object - compile-json-stringify coerceTypes x 4,834,149 ops/sec ±0.48% (96 runs sampled)
+8) multiple types in an object - compile-json-stringify strict x 4,834,149 ops/sec ±0.48% (96 runs sampled)
 ```
