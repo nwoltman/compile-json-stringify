@@ -590,6 +590,12 @@ describe('compile-json-stringify', () => {
       stringifyBoolean(() => {}).should.equal('true');
       stringifyBoolean(Symbol()).should.equal('true');
 
+      const stringifyDate = compileJSONStringify({
+        strict: true,
+        type: 'date',
+      });
+      stringifyDate({toISOString: () => 'iso'}).should.equal('"iso"');
+
       const stringifyTuple = compileJSONStringify({
         strict: true,
         type: 'array',
