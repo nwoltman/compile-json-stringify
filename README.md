@@ -45,16 +45,16 @@ const stringifyUser = compileJsonStringify({
   type: 'object',
   properties: {
     id: {type: 'number'},
-    firstName: {type: 'string'},
-    lastName: {type: 'string'},
+    name: {type: 'string'},
+    phoneNumber: {type: ['null', 'string']},
   },
 });
 
 stringifyUser({
   id: 11,
-  firstName: 'Jane',
-  lastName: 'Ives',
-}); // -> '{"id":11,"firstName":"Jane","lastName":"Ives"}'
+  name: 'Jane',
+  phoneNumber: null,
+}); // -> '{"id":11,"name":"Jane","phoneNumber":null}'
 ```
 
 
@@ -135,7 +135,7 @@ Use this format if the array could have any number of items.
 
 Use this format if you know the exact number of items that an array will have.
 
-**Note:** With this format, only the items that are defined in the tuple will be stringified. If the array being stringified is longer than the defined tuple, all additional items will be ignored. Example:
+**Note:** With tuple format, only the items that are defined in the tuple will be stringified. If the array being stringified is longer than the defined tuple, all additional items will be ignored. Example:
 
 ```js
 const stringify = compileJsonStringify({
