@@ -23,7 +23,7 @@
     "indent": [2, 2, {"SwitchCase": 1}],
     "key-spacing": 2,
     "keyword-spacing": 2,
-    "max-len": [2, 100, 2, {"ignoreUrls": true}],
+    "max-len": [2, 100, 2, {"ignoreUrls": true, "ignoreTemplateLiterals": true}],
     "no-array-constructor": 2,
     "no-console": 2,
     "no-constant-condition": 2,

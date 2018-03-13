@@ -36,10 +36,10 @@ class CodeBuilder {
 
   buildSchemaFn(schema) {
     if (typeof schema !== 'object' || schema === null) {
-      throw new Error(`schema must be an object. Got: ${schema}`);
+      throw new Error(`schema must be an object. Got '${typeof schema}': ${JSON.stringify(schema)}`);
     }
     if (typeof schema.type !== 'string' && !(schema.type instanceof Array)) {
-      throw new Error(`schema.type must be a string or an array. Got: ${schema.type}`);
+      throw new Error(`schema.type must be a string or an array. Got '${typeof schema.type}': ${JSON.stringify(schema.type)}`);
     }
 
     if (schema.type === 'any') {
@@ -188,8 +188,8 @@ class CodeBuilder {
           arrayItems = schema.items;
           if (typeof arrayItems !== 'object' || arrayItems === null) {
             throw new Error(
-              'You must include a valid "items" schema when defining an \'array\' type. Got:' +
-              arrayItems
+              'You must include a valid "items" schema when defining an \'array\' type. Got ' +
+              `'${typeof arrayItems}': ` + JSON.stringify(arrayItems)
             );
           }
           break;
@@ -200,15 +200,15 @@ class CodeBuilder {
           objectProperties = schema.properties;
           if (typeof objectProperties !== 'object' || objectProperties === null) {
             throw new Error(
-              'You must include a "properties" object when defining an \'object\' type. Got:' +
-              objectProperties
+              'You must include a "properties" object when defining an \'object\' type. Got ' +
+              `'${typeof objectProperties}': ` + JSON.stringify(objectProperties)
             );
           }
           break;
         case null:
           throw new Error('Invalid type: null (Please use "null" as a string)');
         default:
-          throw new Error(`Invalid type: ${types[i]}`);
+          throw new Error(`Invalid type: ${JSON.stringify(types[i])}`);
       }
     }
 
