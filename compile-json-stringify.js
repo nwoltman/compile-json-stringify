@@ -1,6 +1,6 @@
 'use strict';
 
-const rgxEscapeChars = /[\u0000-\u001f"\\]/;
+const rgxEscapeChars = /[\u0000-\u001f"\\]/; // eslint-disable-line no-control-regex
 
 function compileJSONStringify(schema) {
   const code = new CodeBuilder(schema).buildCode();
@@ -80,7 +80,7 @@ class CodeBuilder {
       if (shouldCheckType()) {
         code += 'if (typeof value === "string") ';
       }
-      code += `return rgxEscapeChars.test(value) ? JSON.stringify(value) : '"' + value + '"'\n`;
+      code += "return rgxEscapeChars.test(value) ? JSON.stringify(value) : '\"' + value + '\"'\n";
     }
 
     if (types.handleNumber) {
@@ -101,7 +101,7 @@ class CodeBuilder {
       if (shouldCheckType()) {
         code += 'if (value instanceof Date) ';
       }
-      code += `return '"' + value.toISOString() + '"'\n`;
+      code += "return '\"' + value.toISOString() + '\"'\n";
     }
 
     if (types.arrayItems !== null) {

@@ -2,6 +2,8 @@
   "name": "compile-json-stringify",
   "version": "0.1.2",
   "description": "Compile a JSON.stringify() function with type hints for maximum performance",
+  "license": "MIT",
+  "author": "Nathan Woltman <nwoltman@outlook.com>",
   "main": "compile-json-stringify.js",
   "files": [
     "compile-json-stringify.js"
@@ -9,34 +11,38 @@
   "engines": {
     "node": ">=6"
   },
-  "license": "MIT",
-  "author": "Nathan Woltman <nwoltman@outlook.com>",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nwoltman/compile-json-stringify.git"
-  },
+  "repository": "github:nwoltman/compile-json-stringify",
   "homepage": "https://github.com/nwoltman/compile-json-stringify#readme",
-  "bugs": {
-    "url": "https://github.com/nwoltman/compile-json-stringify/issues"
-  },
+  "bugs": "https://github.com/nwoltman/compile-json-stringify/issues",
   "keywords": [
     "compile",
     "json",
     "stringify",
     "fast"
   ],
+  "nyc": {
+    "reporter": [
+      "html",
+      "text-summary"
+    ],
+    "check-coverage": true,
+    "branches": 100,
+    "lines": 100,
+    "statements": 100
+  },
   "devDependencies": {
-    "coveralls": "^3.0.4",
-    "eslint": "^5.16.0",
-    "mocha": "^6.1.4",
+    "@nwoltman/eslint-config": "^0.5.1",
+    "coveralls": "^3.0.7",
+    "eslint": "^6.6.0",
+    "mocha": "^6.2.2",
     "nyc": "^14.1.1",
     "should": "^13.2.3",
-    "sinon": "^7.3.2"
+    "sinon": "^7.5.0"
   },
   "scripts": {
     "lint": "eslint *.js test/*.js",
-    "test-only": "nyc --reporter=html --reporter=text-summary mocha",
-    "test": "npm run lint && npm run test-only",
+    "test-only": "nyc mocha",
+    "test": "eslint *.js test/*.js && nyc mocha",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   }
 }
