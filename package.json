@@ -20,6 +20,10 @@
     "stringify",
     "fast"
   ],
+  "eslintIgnore": [
+    "node_modules",
+    "coverage"
+  ],
   "nyc": {
     "reporter": [
       "html",
@@ -40,9 +44,9 @@
     "sinon": "^7.5.0"
   },
   "scripts": {
-    "lint": "eslint *.js test/*.js",
+    "lint": "eslint .",
     "test-only": "nyc mocha",
-    "test": "eslint *.js test/*.js && nyc mocha",
+    "test": "eslint . && nyc mocha",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   }
 }

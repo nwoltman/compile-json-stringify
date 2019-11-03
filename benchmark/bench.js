@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-
 'use strict';
 
 const Benchmark = require('benchmark');
@@ -298,9 +297,10 @@ if (config.has('8')) {
 
 let lastNumber = '';
 
-suite.filter(compare
-  ? ({name}) => !name.includes('JSON')
-  : ({name}) => !name.includes('master')
+suite.filter(
+  compare
+    ? ({name}) => !name.includes('JSON')
+    : ({name}) => !name.includes('master')
 )
   .on('cycle', (event) => {
     const eventString = event.target.toString();

@@ -1,6 +1,6 @@
 {
   "description": "Dependencies for compile-json-stringify bechmarking",
-  "license": "MIT",
+  "private": true,
   "dependencies": {
     "benchmark": "^2.1.4",
     "compile-json-stringify": "github:nwoltman/compile-json-stringify"
