@@ -38,7 +38,7 @@ class CodeBuilder {
     if (typeof schema !== 'object' || schema === null) {
       throw new Error(`schema must be an object. Got '${typeof schema}': ${JSON.stringify(schema)}`);
     }
-    if (typeof schema.type !== 'string' && !(schema.type instanceof Array)) {
+    if (typeof schema.type !== 'string' && !Array.isArray(schema.type)) {
       throw new Error(`schema.type must be a string or an array. Got '${typeof schema.type}': ${JSON.stringify(schema.type)}`);
     }
 
@@ -114,7 +114,7 @@ class CodeBuilder {
 
       code = arrayFn.code + code;
       if (shouldCheckType()) {
-        code += 'if (value instanceof Array) ';
+        code += 'if (Array.isArray(value)) ';
       }
       code += `return ${arrayFn.name}(value)\n`;
     }
@@ -272,7 +272,7 @@ class CodeBuilder {
   }
 
   buildReusableArrayFnName(schema) {
-    if (schema instanceof Array) { // Too complicated to handle this
+    if (Array.isArray(schema)) { // Too complicated to handle this
       return null;
     }
 
@@ -297,7 +297,7 @@ class CodeBuilder {
 
     const name = reusableFnName || `$array${this.arrayFnID++}`;
 
-    return items instanceof Array
+    return Array.isArray(items)
       ? this.buildTupleArrayFn(items, name)
       : this.buildUnboundedArrayFn(items, name);
   }
