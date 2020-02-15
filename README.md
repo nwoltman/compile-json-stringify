@@ -29,7 +29,7 @@ Inspired by [`fast-json-stringify`](https://github.com/fastify/fast-json-stringi
 
 ```sh
 # npm
-npm install compile-json-stringify --save
+npm install compile-json-stringify
 
 # yarn
 yarn add compile-json-stringify
